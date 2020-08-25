@@ -4,7 +4,7 @@ This is the backend for Simple Flashcard (name TBD)
 
 ## API Documentation
 
-Please see routes.md for API documentation
+Please see [routes.md](https://github.com/notdb/simple-flashcard-backend/blob/master/routes.md) for API documentation
 
 ## About Simple Flashcard
 
