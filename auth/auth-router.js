@@ -38,6 +38,7 @@ router.post("/login", (req, res) => {
   let { username, password } = req.body;
   let authedUser = req.query.user;
   let loggedInUser = { auth_user: authedUser };
+  console.log(req);
   Users.findBy({ username })
     .first()
     .then(user => {
