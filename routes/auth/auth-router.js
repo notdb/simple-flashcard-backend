@@ -4,6 +4,9 @@ const jwt = require("jsonwebtoken");
 
 const Users = require("../users/users-model.js");
 const secrets = require("../../utils/secret.js");
+const generateTokenOne = require("../../utils/auth/generateToken.js");
+const restricted = require("../../utils/auth/restricted-middleware.js");
+const restricted2 = require("../../utils/auth/restricted2.js");
 
 router.post("/register", (req, res) => {
   let user = req.body;
@@ -20,7 +23,7 @@ router.post("/register", (req, res) => {
     });
 });
 
-router.get("/exists", (req, res) => {
+router.get("/exists", restricted, restricted2, (req, res) => {
   let authUser = req.query.user;
   let loggedInUser = { auth_user: authUser };
   Users.isLoggedIn(loggedInUser)
@@ -54,7 +57,7 @@ router.post("/login", (req, res) => {
               });
             }
           });
-        const token = generateToken(user);
+        const token = generateTokenOne(user);
         res.status(200).json({
           message: `Welcome ${user.username}!`,
           token
