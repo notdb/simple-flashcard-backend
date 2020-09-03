@@ -26,37 +26,32 @@ router.post("/register", (req, res) => {
 router.get("/exists", restricted, restricted2, (req, res) => {
   let authUser = req.query.user;
   let loggedInUser = { auth_user: authUser };
-  Users.isLoggedIn(loggedInUser)
-    .first()
-    .then(user => {
-      if (user) {
-        res.status(200).json({ message: "1" });
-      } else {
-        res.status(401).json({ message: "0" });
-      }
-    });
+  console.log("TEST " + authUser);
+  Users.findByDiscordUserName(authUser).then(user => {
+    if (user.length !== 0) {
+      Users.findNameInSessions(user[0].username).then(user => {
+        if (user.length !== 0) {
+          res.status(200).json({ message: "1" });
+        } else {
+          res.status(200).json({ message: "You need to login again" });
+        }
+      });
+    } else {
+      res.status(200).json({ message: "0" });
+    }
+  });
 });
 
 router.post("/login", (req, res) => {
   let { username, password } = req.body;
   let authedUser = req.query.user;
-  let loggedInUser = { auth_user: authedUser };
-  console.log(req);
   Users.findBy({ username })
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
-        Users.isLoggedIn(loggedInUser)
-          .first()
-          .then(user => {
-            if (user) {
-            } else {
-              Users.addLoggedIn({
-                username: username,
-                auth_user: authedUser
-              });
-            }
-          });
+        console.log(user);
+        req.session.username = user.username;
+        console.log(req.session);
         const token = generateTokenOne(user);
         res.status(200).json({
           message: `Welcome ${user.username}!`,

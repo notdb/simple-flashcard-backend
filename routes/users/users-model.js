@@ -7,7 +7,9 @@ module.exports = {
   findById,
   isLoggedIn,
   addLoggedIn,
-  findByIdLoggedIn
+  findByIdLoggedIn,
+  findByDiscordUserName,
+  findNameInSessions
 };
 
 function find() {
@@ -43,4 +45,14 @@ function findById(id) {
   return db("users")
     .where({ id })
     .first();
+}
+
+function findByDiscordUserName(name) {
+  return db("users").where("discord_username", name);
+}
+
+function findNameInSessions(name) {
+  return db("sessions")
+    .select("sess")
+    .where("sess", "like", `%${name}%`);
 }

@@ -9,6 +9,9 @@ listOfCards = [
 
 router.get("/", async (req, res) => {
   try {
+    Cards.testLike("admin").then(cards => {
+      console.log(JSON.parse(cards[0].sess).username);
+    });
     res.status(200).json(listOfCards);
   } catch (error) {
     res.status(500).json(error);
@@ -17,6 +20,8 @@ router.get("/", async (req, res) => {
 
 router.get("/flashcards", async (req, res) => {
   try {
+    console.log(req.session);
+    req.session.save();
     Cards.findBy({ owner: "admin" }).then(cards => {
       res.status(200).json({ cards });
     });
