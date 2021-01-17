@@ -45,6 +45,7 @@ router.get("/exists", restricted, restricted2, (req, res) => {
 router.post("/login", (req, res) => {
   let { username, password } = req.body;
   let authedUser = req.query.user;
+  //console.log({ username });
   Users.findBy({ username })
     .first()
     .then(user => {
